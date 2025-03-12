@@ -1,24 +1,20 @@
 import React from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import NavBar from "./components/NavBar";
-import { NavigationContainer } from "@react-navigation/native";
+import NewsList from "./components/NewsList";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-       <NavBar title="News App" />
-        <StatusBar style="auto" />
-      </View>
-    </NavigationContainer>
+    <SafeAreaView style={styles.container}>
+      <NavBar title="News App" />
+      <NewsList />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 40,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "flex-start",

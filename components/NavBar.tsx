@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -20,8 +20,14 @@ const menuOptions = [
   "Digi",
   "Viihde",
 ];
+
 const NavBar: React.FC<NavbarProps> = ({ title }) => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [genre, setGenre] = useState("Etusivu");
+  useEffect(() => {
+    alert(`Selected genre: ${genre}`);
+    setMenuVisible(false);
+  }, [genre]);
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>
@@ -42,7 +48,7 @@ const NavBar: React.FC<NavbarProps> = ({ title }) => {
               renderItem={({ item }: { item: string }) => (
                 <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => setMenuVisible(false)}
+                  onPress={() => setGenre(item)}
                 >
                   <Text style={styles.menuText}>{item}</Text>
                 </TouchableOpacity>
