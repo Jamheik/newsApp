@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flex: 1,
-    marginBottom: 25,
     backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   image: {
