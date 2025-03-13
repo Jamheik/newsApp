@@ -23,11 +23,11 @@ const menuOptions = [
 
 const NavBar: React.FC<NavbarProps> = ({ title }) => {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [genre, setGenre] = useState("Etusivu");
+  const [category, setCategory] = useState("Etusivu");
   useEffect(() => {
-    alert(`Selected genre: ${genre}`);
+    alert(`Selected genre: ${category}`);
     setMenuVisible(false);
-  }, [genre]);
+  }, [category]);
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>
@@ -48,7 +48,7 @@ const NavBar: React.FC<NavbarProps> = ({ title }) => {
               renderItem={({ item }: { item: string }) => (
                 <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => setGenre(item)}
+                  onPress={() => setCategory(item)}
                 >
                   <Text style={styles.menuText}>{item}</Text>
                 </TouchableOpacity>

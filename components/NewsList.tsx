@@ -1,5 +1,13 @@
 import React from "react";
-import { View, FlatList, StyleSheet, Text, Image } from "react-native";
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import NewsPage from "./NewsPage";
 
 const newsData = [
   {
@@ -7,18 +15,24 @@ const newsData = [
     title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
     imageUrl: "https://picsum.photos/600/300",
     backgroundColor: "#b91c1c",
+    newsText:
+      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
   },
   {
     id: "2",
     title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
     imageUrl: "https://picsum.photos/600/301",
     backgroundColor: "#d97706",
+    newsText:
+      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
   },
   {
     id: "3",
     title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
     imageUrl: "https://picsum.photos/600/303",
     backgroundColor: "#d97706",
+    newsText:
+      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
   },
   {
     id: "4",
@@ -35,10 +49,10 @@ const NewsList: React.FC = () => {
         data={newsData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.container}>
+          <TouchableOpacity style={styles.container}>
             <Image source={{ uri: item.imageUrl }} style={styles.image} />
             <Text style={styles.title}>{item.title}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
