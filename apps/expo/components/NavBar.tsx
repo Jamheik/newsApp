@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Modal,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -19,6 +20,7 @@ const menuOptions = [
   "Urheilu",
   "Digi",
   "Viihde",
+  "Paikallis",
 ];
 
 const NavBar: React.FC<NavbarProps> = ({ title }) => {
