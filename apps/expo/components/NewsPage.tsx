@@ -39,7 +39,7 @@ const NewsPage: React.FC = () => {
               style={styles.link}
               onPress={() => Linking.openURL(originalLink)}
             >
-              LUE ALKUPERÄINEN
+              Read original
             </Text>
           </TouchableOpacity>
         </View>

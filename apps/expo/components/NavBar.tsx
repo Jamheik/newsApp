@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,10 @@ import {
   FlatList,
   Modal,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 type NavbarProps = {
   title: string;
@@ -26,15 +28,43 @@ const menuOptions = [
 const NavBar: React.FC<NavbarProps> = ({ title }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [category, setCategory] = useState("Etusivu");
+  const [searchVisible, setSearchVisible] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const navigation = useNavigation<{
+    setParams: (params: { searchText: string }) => void;
+  }>();
+
+  const textInputRef = useRef<TextInput>(null);
+
   useEffect(() => {
-    alert(`Selected genre: ${category}`);
-    setMenuVisible(false);
-  }, [category]);
+    navigation.setParams({ searchText });
+
+    if (searchVisible) {
+      setTimeout(() => {
+        textInputRef.current?.focus();
+      }, 100);
+    }
+  }, [searchText, searchVisible]);
+
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>
       <View style={{ flex: 1 }} />
-      <TouchableOpacity style={{ paddingRight: 15 }}>
+      {searchVisible ? (
+        <TextInput
+          ref={textInputRef}
+          placeholder="search news"
+          value={searchText}
+          onChangeText={(text) => setSearchText(text)}
+          style={styles.textInput}
+        />
+      ) : null}
+
+      <TouchableOpacity
+        style={{ paddingRight: 15 }}
+        onPress={() => setSearchVisible(!searchVisible)}
+      >
         <Ionicons name="search" size={24} color={"white"} />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => setMenuVisible(true)}>
@@ -50,7 +80,10 @@ const NavBar: React.FC<NavbarProps> = ({ title }) => {
               renderItem={({ item }: { item: string }) => (
                 <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => setCategory(item)}
+                  //onPress={() => setCategory(item)}
+                  onPress={() => {
+                    setMenuVisible(false);
+                  }}
                 >
                   <Text style={styles.menuText}>{item}</Text>
                 </TouchableOpacity>
@@ -60,7 +93,7 @@ const NavBar: React.FC<NavbarProps> = ({ title }) => {
               style={styles.closeButton}
               onPress={() => setMenuVisible(false)}
             >
-              <Text style={styles.closeText}>Sulje</Text>
+              <Text style={styles.closeText}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -115,6 +148,17 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     fontSize: 16,
+  },
+  textInput: {
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 25,
+    width: "50%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    fontSize: 16,
+    marginRight: 10,
+    marginLeft: 10,
   },
 });
 
