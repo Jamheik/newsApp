@@ -1,0 +1,28 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "private": true,
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "Samuel Aikio <samuel.aikio@cap.fi>",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@10.5.2",
+  "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@sentry/node": "^9.5.0",
+    "@sentry/profiling-node": "^9.5.0",
+    "axios": "^1.8.2",
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
+    "mongodb": "^6.14.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
