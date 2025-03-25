@@ -1,4 +1,3 @@
-// filepath: d:\projekti\newsApp\components\newsList.tsx
 import React from "react";
 import {
   View,
@@ -8,12 +7,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 type RootStackParamList = {
-  NewsList: undefined;
+  NewsList: {
+    searchText: string;
+  };
   NewsPage: {
     title: string;
     imageUrl: string;
@@ -35,48 +35,57 @@ type NewsItem = {
   originalLink: string;
 };
 
+type NewsListRouteProp = RouteProp<RootStackParamList, "NewsList">;
+
 const newsData: NewsItem[] = [
   {
     id: "1",
-    title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
+    title: "Uusi teknologia mullistaa arjen",
     imageUrl: "https://picsum.photos/600/300",
     newsText:
-      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
+      "Tutkijat ovat kehittäneet uuden teknologian, joka voi muuttaa arkemme täysin. Tämä innovaatio lupaa nopeampia ja tehokkaampia ratkaisuja moniin päivittäisiin haasteisiin.",
     originalLink: "https://www.google.com",
   },
   {
     id: "2",
-    title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
+    title: "Ilmastonmuutos ja sen vaikutukset",
     imageUrl: "https://picsum.photos/600/301",
     newsText:
-      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
+      "Ilmastonmuutoksen vaikutukset näkyvät jo ympäri maailmaa. Asiantuntijat korostavat, että toimenpiteitä tarvitaan kiireellisesti tilanteen hallitsemiseksi.",
     originalLink: "https://www.google.com",
   },
   {
     id: "3",
-    title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
+    title: "Kaupunki suunnittelee uutta puistoa",
     imageUrl: "https://picsum.photos/600/305",
     newsText:
-      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
+      "Paikallinen kaupunki on julkistanut suunnitelmat uudesta puistosta, joka tarjoaa asukkaille lisää viheralueita ja virkistysmahdollisuuksia.",
     originalLink: "https://www.google.com",
   },
   {
     id: "4",
-    title: "Helena Koivu seurasi huoltomiestä pitkin piha-aluetta",
+    title: "Urheilutapahtuma keräsi ennätysyleisön",
     imageUrl: "https://picsum.photos/600/303",
     newsText:
-      "liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee liirum laarum laarum joojee",
+      "Viikonlopun urheilutapahtuma houkutteli paikalle ennätysyleisön. Tapahtuma oli menestys ja tarjosi unohtumattomia hetkiä kaikille osallistujille.",
     originalLink: "https://www.google.com",
   },
 ];
 
 const NewsList: React.FC = () => {
   const navigation = useNavigation<NewsListNavigationProp>();
+  const route = useRoute<NewsListRouteProp>();
+
+  const { searchText } = route.params || { searchText: "" };
+
+  const filteredNews = newsData.filter((item) => {
+    return item.title.toLowerCase().includes(searchText.toLowerCase());
+  });
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={newsData}
+        data={filteredNews}
         keyExtractor={(item) => item.id}
         renderItem={({ item }: { item: NewsItem }) => (
           <TouchableOpacity
