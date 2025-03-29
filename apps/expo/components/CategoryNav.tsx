@@ -1,19 +1,37 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import { gql, useQuery } from '@apollo/client'
 
-export const categories = [
-  "Technology",
-  "Sports",
-  "Environment",
-  "Health",
-  "Politics",
-  "Entertainment",
-  "Science",
-  "Business",
-];
+const FEED_QUERY = gql`
+  query Feeds {
+    feeds {
+      id
+      feed_name
+    }
+  }
+`
 
 const CategoryNav: React.FC = () => {
+  const [categories, setCategories] = useState<string[]>(['Default Category']);
   const [activeCategory, setActiveCategory] = useState<string>(categories[0]);
+
+  const { loading, error, data } = useQuery(FEED_QUERY, { errorPolicy: "all" });
+
+  React.useEffect(() => {
+    if (!loading && data && data.feeds) {
+      const fetchedCategories = data.feeds.map((feed: { feed_name: string }) => feed.feed_name);
+      setCategories(fetchedCategories);
+      setActiveCategory(fetchedCategories[0]);
+    }
+  }, [loading, data]);
+
+  if (loading) {
+    return <Text style={styles.loadingText}>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text style={styles.errorText}>Error loading categories</Text>;
+  }
 
   return (
     <View style={styles.container}>
@@ -78,6 +96,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 10,
     textAlign: "center",
+  },
+  loadingText: {
+    color: "#FFF",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
+  },
+  errorText: {
+    color: "#FF0000",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 
