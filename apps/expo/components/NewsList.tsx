@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#333",
   },
   articleContainer: {
-    marginBottom: 10,
+    marginTop: 10,
   },
   navItem: {
     fontWeight: "bold",
