@@ -40,7 +40,7 @@ type NewsItem = {
 
 type NewsListRouteProp = RouteProp<RootStackParamList, "NewsList">;
 
-const FEED_QUERY = gql`
+const NEWS_QUERY = gql`
   query Articles($page: Int, $pageSize: Int) {
     articles(page: $page, pageSize: $pageSize) {
       articles {
@@ -65,7 +65,7 @@ const NewsList: React.FC = () => {
   const [page, setPage] = React.useState(1);
   const [articles, setArticles] = React.useState<NewsItem[]>([]);
 
-  const { loading, error, data, fetchMore } = useQuery(FEED_QUERY, {
+  const { loading, error, data, fetchMore } = useQuery(NEWS_QUERY, {
     variables: { page, pageSize: 10 },
     notifyOnNetworkStatusChange: true,
     onCompleted: (data) => {
@@ -102,8 +102,7 @@ const NewsList: React.FC = () => {
         navigation.navigate("NewsPage", {
           title: item.title,
           imageUrl: item.image,
-          newsText: item.newsText,
-          originalLink: item.originalLink,
+          id: item.id,
         })
       }
     />

@@ -10,14 +10,31 @@ import {
   SafeAreaView,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
+import { gql, useQuery } from '@apollo/client'
+
+const ARTICLE_QUERY = gql`
+  query Article($articleId: ID!) {
+    article(id: $articleId) {
+      article {
+        iso_date
+        pub_date
+        link
+      }
+      context {
+        language_code
+        title
+        full_text
+        version
+      }
+    }
+  }
+`;
 
 type RootStackParamList = {
   NewsPage: {
     title: string;
     imageUrl: string;
-    newsText: string;
-    originalLink: string;
-    publicationDate: string; // Added publication date
+    id: string;
   };
 };
 
@@ -25,15 +42,39 @@ type NewsPageRouteProp = RouteProp<RootStackParamList, "NewsPage">;
 
 const NewsPage: React.FC = () => {
   const route = useRoute<NewsPageRouteProp>();
-  const { title, imageUrl, newsText, originalLink, publicationDate } = route.params;
+  const { id, title, imageUrl } = route.params;
+
+  const { data, loading, error } = useQuery(ARTICLE_QUERY, {
+    variables: { articleId: id },
+  });
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.content}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.content}>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  const article = data?.article;
+  const originalLink = article?.article?.link || "#";
+  const newsText = article?.context?.full_text || "Content not available.";
+  const pubDate = (article?.article?.pub_date) || "Unknown date";
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.date}>Julkaistu 12.3.2024 14:30</Text>
+      <Text style={styles.date}>Published {pubDate}</Text>
 
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Image source={{ uri: imageUrl, cache: 'only-if-cached' }} style={styles.image} />
 
       <View style={styles.middleContainer}>
         <TouchableOpacity>
