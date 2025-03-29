@@ -3,13 +3,12 @@ import {
   View,
   FlatList,
   StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { NewsItemComponent } from "./NewsItemComponent";
+import CategoryNav from "./CategoryNav";
 
 type RootStackParamList = {
   NewsList: {
@@ -65,7 +64,7 @@ const newsData: NewsItem[] = [
     newsText:
       "Paikallinen kaupunki on julkistanut suunnitelmat uudesta puistosta, joka tarjoaa asukkaille lisää viheralueita ja virkistysmahdollisuuksia.",
     originalLink: "https://www.google.com",
-    categories: ["Environment", "Community", "Community", "Community", "Community"],
+    categories: ["Environment", "Community","Environment", "Community"],
   },
   {
     id: "4",
@@ -88,16 +87,7 @@ const NewsList: React.FC = () => {
     return item.title.toLowerCase().includes(searchText.toLowerCase());
   });
 
-  const navItems = [
-    { id: "1", name: "Technology" },
-    { id: "2", name: "Environment" },
-    { id: "3", name: "Sports" },
-    { id: "4", name: "Health" },
-  ];
-
-  const [activeCategory, setActiveCategory] = React.useState(navItems[0].name);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [imageLoaded, setImageLoaded] = React.useState(false);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -111,13 +101,12 @@ const NewsList: React.FC = () => {
   const refreshingAnimation = refreshing ? (
     <View style={styles.refreshingContainer}>
       <ActivityIndicator size="large" color="#ffffff" />
-      <Text style={styles.refreshingText}>Refreshing...</Text>
     </View>
   ) : null;
 
   const renderNewsItem = ({ item }: { item: NewsItem }) => (
-    <TouchableOpacity
-      style={[styles.articleContainer, { backgroundColor: getRandomBackgroundColor() }]}
+    <NewsItemComponent
+      item={item}
       onPress={() =>
         navigation.navigate("NewsPage", {
           title: item.title,
@@ -126,34 +115,14 @@ const NewsList: React.FC = () => {
           originalLink: item.originalLink,
         })
       }
-    >
-      <View style={styles.imageContainer}>
-        {!imageLoaded && (
-          <ActivityIndicator size="large" color="#ffffff" style={styles.imageLoader} />
-        )}
-        <Image
-          source={{ uri: item.imageUrl }}
-          style={styles.newsImage}
-          onLoad={() => setImageLoaded(true)}
-        />
-      </View>
-      <View style={styles.newsCategoryContainer}>
-        {item.categories.map((category, index) => (
-          <Text key={index} style={styles.newsCategory}>{category}</Text>
-        ))}
-      </View>
-      <View style={styles.newsContentContainer}>
-        <Text style={styles.newsTitle}>{item.title}</Text>
-        <View style={styles.newsFooter}>
-          <Text style={styles.newsDate}>29.03.2025 14:19</Text>
-          <Text style={styles.newsReadTime}>5 min luettu</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+    />
   );
 
   return (
     <View style={styles.container}>
+      
+      <CategoryNav />
+
       <FlatList
         data={filteredNews}
         keyExtractor={(item) => item.id}
@@ -166,48 +135,10 @@ const NewsList: React.FC = () => {
   );
 };
 
-const getRandomBackgroundColor = () => {
-    const colors = ["#c61d48", "#c6641d", "#7d1dc6", "#c6641d"];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.9)",
-  },
-  navBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 10,
-    backgroundColor: "#333",
-  },
-  articleContainer: {
-    marginTop: 10,
-  },
-  navItem: {
-    fontWeight: "bold",
-    fontStyle: "italic",
-    color: "white",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  newsItem: {
-    marginBottom: 10,
-  },
-  articleImage: {
-    width: "100%",
-    height: 200,
-    resizeMode: "cover",
-  },
-  articleTitle: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 38,
-    fontWeight: "bold",
-    fontFamily: "Nobile",
-    marginTop: 4,
-    marginHorizontal: 5,
   },
   refreshingContainer: {
     position: "absolute",
@@ -218,72 +149,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  refreshingText: {
-    color: "white",
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  newsImage: {
-    width: "100%",
-    height: 200,
-    resizeMode: "cover",
-  },
-  newsContentContainer: {
-    padding: 10,
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  newsCategoryContainer: {
-    position: "absolute",
-    top: 8,
-    left: 8,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 5,
-  },
-  newsCategory: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 4,
-    color: "#ffffff",
-    fontSize: 12,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-    marginRight: 5,
-    marginBottom: 5,
-  },
-  newsTitle: {
-    fontWeight: "bold",
-    color: "#ffffff",
-    fontSize: 32,
-    lineHeight: 36,
-    fontFamily: "Nobile, Helvetica",
-  },
-  newsFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  newsDate: {
-    color: "#ffffff",
-    fontSize: 12,
-  },
-  newsReadTime: {
-    color: "#ffffff",
-    fontSize: 12,
-  },
-  imageContainer: {
-    position: "relative",
-    width: "100%",
-    height: 200,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  imageLoader: {
-    position: "absolute",
-    zIndex: 1,
   },
 });
 

@@ -11,23 +11,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { categories as menuOptions } from './CategoryNav'
 
 type NavbarProps = {
   title: string;
 };
-const menuOptions = [
-  "Etusivu",
-  "Kotimaa",
-  "Ulkomaa",
-  "Urheilu",
-  "Digi",
-  "Viihde",
-  "Paikallis",
-];
 
-const NavBar: React.FC<NavbarProps> = ({ title }) => {
+const NavBar: React.FC<NavbarProps> = ({ title }: any) => {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [category, setCategory] = useState("Etusivu");
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
 
@@ -110,7 +101,6 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#1E6CC6",
     padding: 15,
-    height: 70,
   },
   title: {
     color: "white",
@@ -121,13 +111,16 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
   },
   menu: {
     backgroundColor: "white",
     padding: 20,
-    borderRadius: 10,
-    width: "80%",
+    borderRadius: 0,
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
   menuItem: {
     paddingVertical: 10,
