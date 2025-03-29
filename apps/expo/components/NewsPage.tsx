@@ -17,6 +17,7 @@ type RootStackParamList = {
     imageUrl: string;
     newsText: string;
     originalLink: string;
+    publicationDate: string; // Added publication date
   };
 };
 
@@ -24,29 +25,29 @@ type NewsPageRouteProp = RouteProp<RootStackParamList, "NewsPage">;
 
 const NewsPage: React.FC = () => {
   const route = useRoute<NewsPageRouteProp>();
-  const { title, imageUrl, newsText, originalLink } = route.params;
+  const { title, imageUrl, newsText, originalLink, publicationDate } = route.params;
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+    <ScrollView contentContainerStyle={styles.container}>
 
-        <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.date}>Julkaistu 12.3.2024 14:30</Text>
 
-        <View style={styles.middleContainer}>
-          <TouchableOpacity>
-            <Text
-              style={styles.link}
-              onPress={() => Linking.openURL(originalLink)}
-            >
-              Read original
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <Image source={{ uri: imageUrl }} style={styles.image} />
 
-        <Text style={styles.content}>{newsText}</Text>
-      </ScrollView>
-    </View>
+      <View style={styles.middleContainer}>
+        <TouchableOpacity>
+          <Text
+            style={styles.link}
+            onPress={() => Linking.openURL(originalLink)}
+          >
+            Read original
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.content}>{newsText}</Text>
+    </ScrollView>
   );
 };
 
@@ -56,15 +57,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
   },
   image: {
-    width: "100%",
+    width: 'auto',
     height: 200,
     resizeMode: "cover",
+    marginHorizontal: 8,
   },
   title: {
     color: "#FFF",
-    fontSize: 22,
+    fontSize: 28,
     fontWeight: "bold",
     marginHorizontal: 10,
+    marginTop: 10,
+  },
+  date: {
+    color: "#AAA",
+    fontSize: 14,
+    marginHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 15,
   },
   middleContainer: {
     flexDirection: "row",

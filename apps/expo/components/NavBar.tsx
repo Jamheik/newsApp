@@ -102,7 +102,7 @@ const NavBar: React.FC<NavbarProps> = ({ title }) => {
   );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   navbar: {
     width: "100%",
     flexDirection: "row",
