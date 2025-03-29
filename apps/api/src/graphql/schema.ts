@@ -15,6 +15,7 @@ export const typeDefs = `#graphql
     iso_date: String
     content: String
     image: String
+    categories: [String]
   }
 
   type ArticleContext {

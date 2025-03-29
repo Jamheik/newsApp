@@ -24,6 +24,7 @@ export const Resolver = async (_: any, { page = 1, pageSize = 10 }: { page: numb
             unique_id: article.unique_id,
             title: context?.title, // Fallback title
             link: article.link,
+            categories: article.categories,
             pub_date: article.pub_date,
             iso_date: article.iso_date,
             content: context?.full_text, // Fetch content from articles_context

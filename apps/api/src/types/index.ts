@@ -14,6 +14,7 @@ export interface Article {
     pub_date?: string;
     iso_date?: string;
     image?: string | null;
+    categories: string[];
 }
 
 export interface ArticleContext {
