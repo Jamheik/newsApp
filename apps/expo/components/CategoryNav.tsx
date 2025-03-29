@@ -4,10 +4,7 @@ import { gql, useQuery } from '@apollo/client'
 
 const FEED_QUERY = gql`
   query Feeds {
-    feeds {
-      id
-      feed_name
-    }
+    categories
   }
 `
 
@@ -18,10 +15,9 @@ const CategoryNav: React.FC = () => {
   const { loading, error, data } = useQuery(FEED_QUERY, { errorPolicy: "all" });
 
   React.useEffect(() => {
-    if (!loading && data && data.feeds) {
-      const fetchedCategories = data.feeds.map((feed: { feed_name: string }) => feed.feed_name);
-      setCategories(fetchedCategories);
-      setActiveCategory(fetchedCategories[0]);
+    if (!loading && data && data.categories) {
+      setCategories(data.categories);
+      setActiveCategory(data.categories[0]);
     }
   }, [loading, data]);
 
