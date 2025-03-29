@@ -7,13 +7,13 @@ export interface Feed {
 }
 
 export interface Article {
-    _id?: ObjectId;
     feed_id: ObjectId;
-    unique_id: string | null;
+    unique_id: string;
     link: string;
     pub_date?: string;
     iso_date?: string;
     image?: string | null;
+    categories: string[];
 }
 
 export interface ArticleContext {
