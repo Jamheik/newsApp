@@ -21,7 +21,7 @@ const NewsItemComponent = ({ item, onPress }: NewsItemComponentProps) => {
   return (
     <TouchableOpacity style={styles.newsItem} onPress={onPress}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: item.image, cache: 'force-cache', scale: 400 }} style={styles.newsImage} />
+        <Image source={{ uri: item.image, cache: 'only-if-cached' }} style={styles.newsImage} />
       </View>
       <View style={styles.newsContentContainer}>
         <Text style={styles.newsTitle}>{item.title}</Text>
