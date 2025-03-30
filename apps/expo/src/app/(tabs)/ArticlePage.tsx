@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Linking,
-  SafeAreaView,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { gql, useQuery } from '@apollo/client'
+import { languageTag } from "../../utils/language";
 
 const ARTICLE_QUERY = gql`
   query Article($articleId: ID!) {
@@ -40,7 +40,7 @@ type RootStackParamList = {
 
 type NewsPageRouteProp = RouteProp<RootStackParamList, "NewsPage">;
 
-const NewsPage: React.FC = () => {
+const ArticlePage: React.FC = () => {
   const route = useRoute<NewsPageRouteProp>();
   const { id, title, imageUrl } = route.params;
 
@@ -67,12 +67,19 @@ const NewsPage: React.FC = () => {
   const article = data?.article;
   const originalLink = article?.article?.link || "#";
   const newsText = article?.context?.full_text || "Content not available.";
-  const pubDate = (article?.article?.pub_date) || "Unknown date";
+
+  const publishString: any = new Date(article?.article?.pub_date).toLocaleString(languageTag, {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.date}>Published {pubDate}</Text>
+      <Text style={styles.date}>Published {publishString}</Text>
 
       <Image source={{ uri: imageUrl, cache: 'only-if-cached' }} style={styles.image} />
 
@@ -133,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewsPage;
+export default ArticlePage;

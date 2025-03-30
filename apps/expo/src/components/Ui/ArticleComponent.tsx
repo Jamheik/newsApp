@@ -17,12 +17,14 @@ type NewsItemComponentProps = {
   onPress: () => void;
 }
 
-const NewsItemComponent = ({ item, onPress }: NewsItemComponentProps) => {
+const ArticleComponent = ({ item, onPress }: NewsItemComponentProps) => {
   return (
     <TouchableOpacity style={styles.newsItem} onPress={onPress}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: item.image, cache: 'only-if-cached' }} style={styles.newsImage} />
-      </View>
+      {item.image && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item.image, cache: 'only-if-cached' }} style={styles.newsImage} />
+        </View>
+      )}
       <View style={styles.newsContentContainer}>
         <Text style={styles.newsTitle}>{item.title}</Text>
         <View style={styles.newsCategoryContainer}>
@@ -86,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { NewsItemComponent, CategoryBadge };
+export { ArticleComponent, CategoryBadge };

@@ -7,6 +7,7 @@ export const Resolver = async (_: any, { page = 1, pageSize = 10 }: { page: numb
     const total = await articlesCollection.countDocuments();
     const articles = await articlesCollection
         .find()
+        .sort({ iso_date: -1 }) // Sort by iso_date in descending order
         .skip((page - 1) * pageSize)
         .limit(pageSize)
         .toArray();

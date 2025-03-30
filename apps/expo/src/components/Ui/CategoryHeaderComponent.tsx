@@ -8,7 +8,7 @@ const FEED_QUERY = gql`
   }
 `
 
-const CategoryNav: React.FC = () => {
+const CategoryHeaderComponent: React.FC = () => {
   const [categories, setCategories] = useState<string[]>(['Default Category']);
   const [activeCategory, setActiveCategory] = useState<string>(categories[0]);
 
@@ -107,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CategoryNav;
+export default CategoryHeaderComponent;
