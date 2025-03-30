@@ -22,7 +22,7 @@ export const Resolver = async (_: any, { id }: { id: string }, { db }: { db: Db 
         article: {
             id: article._id?.toHexString(),
             feed_id: article.feed_id.toHexString(),
-            categories: [...article.categories],
+            categories: article?.categories,
             unique_id: article.unique_id,
             link: article.link,
             pub_date: article.pub_date,
