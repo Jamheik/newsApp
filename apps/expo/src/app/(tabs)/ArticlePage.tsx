@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
   Linking,
-  SafeAreaView,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { gql, useQuery } from '@apollo/client'
@@ -40,7 +39,7 @@ type RootStackParamList = {
 
 type NewsPageRouteProp = RouteProp<RootStackParamList, "NewsPage">;
 
-const NewsPage: React.FC = () => {
+const ArticlePage: React.FC = () => {
   const route = useRoute<NewsPageRouteProp>();
   const { id, title, imageUrl } = route.params;
 
@@ -133,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewsPage;
+export default ArticlePage;

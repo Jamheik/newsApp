@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { NewsItemComponent } from "./NewsItemComponent";
-import CategoryNav from "./CategoryNav";
+import { ArticleComponent } from "../../components/Ui/ArticleComponent";
+import CategoryHeaderComponent from "../../components/Ui/CategoryHeaderComponent";
 import { gql, useQuery } from '@apollo/client'
 
 type RootStackParamList = {
@@ -18,8 +18,7 @@ type RootStackParamList = {
   NewsPage: {
     title: string;
     imageUrl: string;
-    newsText: string;
-    originalLink: string;
+    id: string;
   };
 };
 
@@ -57,10 +56,8 @@ const NEWS_QUERY = gql`
   }
 `;
 
-const NewsList: React.FC = () => {
+const ArticleListPage: React.FC = () => {
   const navigation = useNavigation<NewsListNavigationProp>();
-  const route = useRoute<NewsListRouteProp>();
-  const { searchText } = route.params || { searchText: "" };
 
   const [page, setPage] = React.useState(1);
   const [articles, setArticles] = React.useState<NewsItem[]>([]);
@@ -96,7 +93,7 @@ const NewsList: React.FC = () => {
   }, [loading, data, fetchMore, page]);
 
   const renderNewsItem = ({ item }: { item: any }) => (
-    <NewsItemComponent
+    <ArticleComponent
       item={item}
       onPress={() =>
         navigation.navigate("NewsPage", {
@@ -110,7 +107,7 @@ const NewsList: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <CategoryNav />
+      <CategoryHeaderComponent />
 
       <FlatList
         data={articles}
@@ -133,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewsList;
+export default ArticleListPage;
