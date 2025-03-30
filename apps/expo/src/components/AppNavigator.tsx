@@ -1,4 +1,4 @@
-import { AppNavigatorProps } from "../types/navigation";
+import { AppNavigatorProps } from "../types/general";
 import React from "react";
 import { BackHandler, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";

@@ -5,11 +5,12 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ArticleComponent } from "../../components/Ui/ArticleComponent";
 import CategoryHeaderComponent from "../../components/Ui/CategoryHeaderComponent";
 import { gql, useQuery } from '@apollo/client'
+
 
 type RootStackParamList = {
   NewsList: {
@@ -36,8 +37,6 @@ type NewsItem = {
   categories: string[];
   createdAt: Date;
 };
-
-type NewsListRouteProp = RouteProp<RootStackParamList, "NewsList">;
 
 const NEWS_QUERY = gql`
   query Articles($page: Int, $pageSize: Int) {
