@@ -72,5 +72,6 @@ export const typeDefs = `#graphql
     articles(page: Int, pageSize: Int): ArticlesResponse!
     article(id: ID!): ArticleDetail
     weather(location: String!): Weather
+    categories: [String!]!
   }
 `;
