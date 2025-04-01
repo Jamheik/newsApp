@@ -8,29 +8,34 @@ import { styles as NavBarStyles, Header } from "../app/_header";
 const Stack = createStackNavigator();
 
 const AppNavigator: React.FC<AppNavigatorProps> = ({ screens }) => {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator>
-                {screens.map(({ name, component, title }, index) => (
-                    <Stack.Screen
-                        key={index}
-                        name={name}
-                        component={component}
-                        options={({ route }) => ({
-                            header: () => (
-                                <SafeAreaView
-                                    style={{
-                                        backgroundColor: NavBarStyles.navbar.backgroundColor,
-                                    }}>
-                                    <Header title={`${typeof title === "function" ? title(route) : title}`} />
-                                </SafeAreaView>
-                            ),
-                        })}
-                    />
-                ))}
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <Stack.Navigator id={undefined}>
+        {screens.map(({ name, component, title }, index) => (
+          <Stack.Screen
+            key={index}
+            name={name}
+            component={component}
+            options={({ route }) => ({
+              header: () => (
+                <SafeAreaView
+                  style={{
+                    backgroundColor: NavBarStyles.navbar.backgroundColor,
+                  }}
+                >
+                  <Header
+                    title={`${
+                      typeof title === "function" ? title(route) : title
+                    }`}
+                  />
+                </SafeAreaView>
+              ),
+            })}
+          />
+        ))}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 export default AppNavigator;
