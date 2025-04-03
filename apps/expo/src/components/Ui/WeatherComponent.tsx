@@ -5,17 +5,14 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  Linking,
   TextInput,
-  Button,
+  ActivityIndicator,
+  Keyboard,
 } from "react-native";
-import { RouteProp, useRoute } from "@react-navigation/native";
 import { gql, useQuery } from "@apollo/client";
-import { languageTag } from "../../utils/language";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const ARTICLE_QUERY = gql`
+const WEATHER_QUERY = gql`
   query Weather($location: String!) {
     weather(location: $location) {
       temperature
@@ -33,66 +30,66 @@ const ARTICLE_QUERY = gql`
 
 const WeatherComponent: React.FC = () => {
   const [city, setCity] = useState("");
-  const [weatherData, setWeatherData] = useState("");
-  const [iconUrl, setIconUrl] = useState("");
+  const [searchCity, setSearchCity] = useState("");
 
-  const { data, loading, error, refetch } = useQuery(ARTICLE_QUERY, {
-    variables: { location: "" },
-    skip: true,
+  const { data, loading, error } = useQuery(WEATHER_QUERY, {
+    variables: { location: searchCity },
+    skip: !searchCity,
   });
 
-  const fetchWeather = async () => {
-    setIconUrl("");
-    setWeatherData("");
-    if (!city) {
-      setWeatherData("Please enter a city name.");
+  const handleSearch = () => {
+    if (city.trim() === "") {
+      alert("Please enter a city name");
       return;
     }
-
-    try {
-      const { data } = await refetch({ location: city });
-      const {
-        temperature,
-        country,
-        feels_like,
-        wind_speed,
-        location,
-        conditions,
-      } = data.weather;
-
-      setWeatherData(
-        `Temperature: ${temperature}°C\nCountry: ${country}\nFeels Like: ${feels_like}°C\nWind Speed: ${wind_speed} km/h\nLocation: ${location}`
-      );
-      setIconUrl(
-        `https://openweathermap.org/img/wn/${conditions[0].icon}@2x.png?quality=lossless`
-      );
-    } catch (err) {
-      setWeatherData("Error: " + err.message);
-    }
+    setSearchCity(city);
+    Keyboard.dismiss();
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
         value={city}
-        onChangeText={setCity}
+        onChangeText={(e) => setCity(e)}
         placeholder="Enter city name"
         style={styles.input}
       />
-      <TouchableOpacity style={styles.button} onPress={fetchWeather}>
+      <TouchableOpacity style={styles.button} onPress={handleSearch}>
         <Text style={styles.buttonText}>Search Weather</Text>
       </TouchableOpacity>
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : (
-        <Text style={styles.weatherData}>{weatherData}</Text>
+
+      {loading && (
+        <ActivityIndicator size="large" color="#ffffff" style={styles.loader} />
       )}
-      <Image
-        source={{
-          uri: `${iconUrl}`,
-        }}
-        style={{ width: 100, height: 100, marginTop: 20 }}
-      />
+      {error && <Text style={styles.weatherData}>Error: {error.message}</Text>}
+
+      {data && data.weather && (
+        <View>
+          <Text style={styles.weatherData}>
+            Temperature: {data.weather.temperature}°C
+          </Text>
+          <Text style={styles.weatherData}>
+            Feels Like: {data.weather.feels_like}°C
+          </Text>
+          <Text style={styles.weatherData}>
+            Wind Speed: {data.weather.wind_speed} km/h
+          </Text>
+          <Text style={styles.weatherData}>
+            Location: {data.weather.location}
+          </Text>
+          <Text style={styles.weatherData}>
+            Description: {data.weather.conditions[0]?.description}
+          </Text>
+          {data.weather.conditions[0]?.icon && (
+            <Image
+              source={{
+                uri: `https://openweathermap.org/img/wn/${data.weather.conditions[0].icon}@2x.png`,
+              }}
+              style={styles.weatherImage}
+            />
+          )}
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -130,6 +127,15 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  loader: {
+    paddingTop: 100,
+  },
+  weatherImage: {
+    width: 100,
+    height: 100,
+    alignSelf: "center",
+    marginTop: 20,
   },
 });
 
