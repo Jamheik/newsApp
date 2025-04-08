@@ -11,10 +11,11 @@ import {
 } from "react-native";
 import { gql, useQuery } from "@apollo/client";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Location from "expo-location";
 
 const WEATHER_QUERY = gql`
-  query Weather($location: String!) {
-    weather(location: $location) {
+  query Weather($location: String, $latitude: Float, $longitude: Float) {
+    weather(location: $location, latitude: $latitude, longitude: $longitude) {
       temperature
       country
       feels_like
@@ -31,10 +32,19 @@ const WEATHER_QUERY = gql`
 const WeatherComponent: React.FC = () => {
   const [city, setCity] = useState("");
   const [searchCity, setSearchCity] = useState("");
+  const [gpsLocation, setGpsLocation] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
 
   const { data, loading, error } = useQuery(WEATHER_QUERY, {
-    variables: { location: searchCity },
-    skip: !searchCity,
+    variables: {
+      longitude: gpsLocation.longitude,
+      latitude: gpsLocation.latitude,
+      location: searchCity,
+    },
+    skip:
+      !searchCity && gpsLocation.latitude === 0 && gpsLocation.longitude === 0,
   });
 
   const handleSearch = () => {
@@ -42,8 +52,24 @@ const WeatherComponent: React.FC = () => {
       alert("Please enter a city name");
       return;
     }
+    setGpsLocation({ latitude: 0, longitude: 0 });
     setSearchCity(city);
     Keyboard.dismiss();
+  };
+  const handleGpsSearch = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      alert("Permission to access location was denied");
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setGpsLocation({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
+    setSearchCity("");
+    setCity("");
   };
 
   return (
@@ -56,6 +82,9 @@ const WeatherComponent: React.FC = () => {
       />
       <TouchableOpacity style={styles.button} onPress={handleSearch}>
         <Text style={styles.buttonText}>Search Weather</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleGpsSearch}>
+        <Text style={styles.buttonText}>📍 Use GPS Location</Text>
       </TouchableOpacity>
 
       {loading && (
