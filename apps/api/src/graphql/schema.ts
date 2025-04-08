@@ -71,7 +71,7 @@ export const typeDefs = `#graphql
     feeds: [Feed!]!
     articles(page: Int, pageSize: Int): ArticlesResponse!
     article(id: ID!): ArticleDetail
-    weather(location: String!): Weather
+    weather(location: String, latitude: Float, longitude: Float): Weather
     categories: [String!]!
   }
 `;
