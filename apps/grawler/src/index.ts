@@ -1,17 +1,11 @@
+import { Db } from 'mongodb';
+import dotenv from 'dotenv';
+import pLimit from 'p-limit';
 import * as Sentry from '@sentry/node';
 import { connectToDb } from './db/mongo';
-import { fetchAndStoreFeed } from './services/feedService';
-import { enrichArticlesWithFullContent } from './services/articleService';
-import { regenerateArticleContent } from './services/regenerateService';
-import { Db } from 'mongodb';
-
-import dotenv from 'dotenv';
-import { FeedService } from './services/news/FeedService';
-import pLimit from 'p-limit';
-
-import { DefaultArticleScraper } from './services/DefaultArticleScraper'; // Adjust the import path as needed
+import { FeedService } from './services/FeedService';
 import { ArticleContextService } from './services/ArticleContextService';
-import { ArticleRegenerationService } from './services/news/ArticleRegenerationService';
+import { ArticleRegenerationService } from './services/ArticleRegenerationService';
 
 dotenv.config();
 
@@ -43,7 +37,6 @@ async function runContentScraper(db: Db, concurrencyLimit = 5): Promise<void> {
         console.log('Starting content scraper job...');
         const articleContextService = new ArticleContextService(db, concurrencyLimit); // Adjust concurrency limit as needed.
 
-        // Process all articles to scrape their content and store article contexts.
         await articleContextService.processAllArticles();
         console.log('Article contexts processing complete.');
     } catch (error) {
@@ -71,8 +64,8 @@ async function runRegenerationService(db: Db, concurrencyLimit = 5): Promise<voi
         await runFeedScraper(db);
         await runContentScraper(db);
 
-        // await runRegenerationService(db, 20);
-        
+        await runRegenerationService(db, 20);
+
     } catch (error) {
         Sentry.captureException(error);
         console.error('Error in scraper point:', error);
