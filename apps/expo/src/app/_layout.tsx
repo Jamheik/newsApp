@@ -11,7 +11,7 @@ export default function RootLayout() {
     {
       name: "NewsList",
       component: ArticleListPage,
-      title: "News App",
+      title: "Uutiset",
     },
     {
       name: "NewsPage",

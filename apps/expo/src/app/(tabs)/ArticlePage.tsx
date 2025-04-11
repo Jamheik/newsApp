@@ -9,7 +9,7 @@ import {
   Linking,
 } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { gql, useQuery } from '@apollo/client'
+import { gql, useQuery } from "@apollo/client";
 import { languageTag } from "../../utils/language";
 
 const ARTICLE_QUERY = gql`
@@ -40,6 +40,52 @@ type RootStackParamList = {
 
 type NewsPageRouteProp = RouteProp<RootStackParamList, "NewsPage">;
 
+
+const MarkdownText: React.FC<{ style?: any; children: string }> = ({
+  style,
+  children,
+}) => {
+  const regex = /(\*\*([^*]+)\*\*)/g;
+  const tokens = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = regex.exec(children)) !== null) {
+    if (match.index > lastIndex) {
+      tokens.push({
+        text: children.slice(lastIndex, match.index),
+        bold: false,
+      });
+    }
+    tokens.push({
+      text: match[2],
+      bold: true,
+    });
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < children.length) {
+    tokens.push({
+      text: children.slice(lastIndex),
+      bold: false,
+    });
+  }
+
+  return (
+    <Text style={style}>
+      {tokens.map((token, index) =>
+        token.bold ? (
+          <Text key={index} style={styles.boldText}>
+            {token.text}
+          </Text>
+        ) : (
+          <Text key={index}>{token.text}</Text>
+        )
+      )}
+    </Text>
+  );
+};
+
 const ArticlePage: React.FC = () => {
   const route = useRoute<NewsPageRouteProp>();
   const { id, title, imageUrl } = route.params;
@@ -68,33 +114,31 @@ const ArticlePage: React.FC = () => {
   const originalLink = article?.article?.link || "#";
   const newsText = article?.context?.full_text || "Content not available.";
 
-  const publishString: any = new Date(article?.article?.pub_date).toLocaleString(languageTag, {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  const publishString: string = new Date(article?.article?.pub_date).toLocaleString(
+    languageTag,
+    {
+      year: "numeric",
+      month: "numeric",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.container} >
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.date}>Published {publishString}</Text>
 
-      <Image source={{ uri: imageUrl, cache: 'only-if-cached' }} style={styles.image} />
+      <Image source={{ uri: imageUrl, cache: "only-if-cached" }} style={styles.image} />
 
       <View style={styles.middleContainer}>
-        <TouchableOpacity>
-          <Text
-            style={styles.link}
-            onPress={() => Linking.openURL(originalLink)}
-          >
-            Read original
-          </Text>
+        <TouchableOpacity onPress={() => Linking.openURL(originalLink)}>
+          <Text style={styles.link}>Read original</Text>
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.content}>{newsText}</Text>
+      <MarkdownText style={styles.content}>{newsText}</MarkdownText>
     </ScrollView>
   );
 };
@@ -102,10 +146,13 @@ const ArticlePage: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#000",
+    backgroundColor: "rgba(0, 0, 0, 0.9)",
+  },
+  contentContainer: {
+    paddingBottom: 55,
   },
   image: {
-    width: 'auto',
+    width: "auto",
     height: 200,
     resizeMode: "cover",
     marginHorizontal: 8,
@@ -135,8 +182,12 @@ const styles = StyleSheet.create({
   },
   content: {
     color: "#FFF",
-    fontSize: 16,
-    marginHorizontal: 10,
+    fontSize: 18,
+    marginHorizontal: 15,
+  },
+  boldText: {
+    fontWeight: "bold",
+    color: "#FFF",
   },
 });
 

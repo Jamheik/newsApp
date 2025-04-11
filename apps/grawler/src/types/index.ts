@@ -7,6 +7,7 @@ export interface Feed {
 }
 
 export interface Article {
+    _id?: ObjectId;
     feed_id: ObjectId;
     unique_id: string;
     link: string;
@@ -33,4 +34,14 @@ export interface ArticleAttachment {
     attachment_url: string;
     local_path?: string;
     created_at: Date;
+}
+
+
+export interface ArticleContent {
+    title: string;
+    fullText: string;
+    attachments: {
+        images: string[];
+        videos: string[];
+    };
 }

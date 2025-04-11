@@ -1,6 +1,6 @@
 import axios from 'axios';
 import path from 'path';
-import { ListBucketsCommand, S3Client } from '@aws-sdk/client-s3';
+import {  S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 
 let r2Client: S3Client
@@ -39,7 +39,6 @@ export async function uploadImageToStorage(imageUrl: string): Promise<string | n
             ContentType: response.headers['content-type']
         };
 
-        // Use the Upload helper from @aws-sdk/lib-storage for a managed upload
         const parallelUpload = new Upload({
             client: r2Client,
             params

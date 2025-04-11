@@ -16,6 +16,7 @@ export const typeDefs = `#graphql
     content: String
     image: String
     categories: [String]
+    version: Int
   }
 
   type ArticleContext {
@@ -40,7 +41,6 @@ export const typeDefs = `#graphql
   type ArticleDetail {
     article: Article!
     context: ArticleContext
-    attachments: [ArticleAttachment!]!
   }
 
   type ArticlesResponse {
@@ -67,11 +67,16 @@ export const typeDefs = `#graphql
     timestamp: String!
   }
 
+  type CategoryList {
+    label: String!
+    values: [String!]!
+  }
+
   type Query {
     feeds: [Feed!]!
-    articles(page: Int, pageSize: Int): ArticlesResponse!
-    article(id: ID!): ArticleDetail
+    articles(page: Int, pageSize: Int, categories: [String!], version: Int): ArticlesResponse!
+    article(id: ID!, version: Int): ArticleDetail
     weather(location: String, latitude: Float, longitude: Float): Weather
-    categories: [String!]!
+    categories(label: String): [CategoryList!]!
   }
 `;

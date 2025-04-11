@@ -1,6 +1,6 @@
 import { AppNavigatorProps } from "../types/general";
 import React from "react";
-import { BackHandler, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { styles as NavBarStyles, Header } from "../app/_header";
@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 const AppNavigator: React.FC<AppNavigatorProps> = ({ screens }) => {
   return (
     <NavigationContainer>
-      <Stack.Navigator id={undefined}>
+      <Stack.Navigator>
         {screens.map(({ name, component, title }, index) => (
           <Stack.Screen
             key={index}
