@@ -18,11 +18,11 @@ export default function RootLayout() {
       component: ArticlePage,
       title: "News Details",
     },
-    /* {
+    {
       name: "WeatherPage",
       component: WeatherComponent,
       title: "Weather",
-    }, */
+    },
   ];
 
   return (

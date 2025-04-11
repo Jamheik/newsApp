@@ -1,6 +1,9 @@
 {
   "expo": {
-    "plugins": ["expo-localization"],
+    "plugins": [
+      "expo-location",
+      "expo-localization"
+    ],
     "name": "newsApp",
     "slug": "newsApp",
     "version": "1.0.0",
