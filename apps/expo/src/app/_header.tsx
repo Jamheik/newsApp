@@ -26,6 +26,7 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+  
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>

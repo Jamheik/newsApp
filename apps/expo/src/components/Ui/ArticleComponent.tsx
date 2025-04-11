@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   newsCategoryContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginBottom: 5,
+    marginVertical: 5,
   },
   newsCategory: {
     backgroundColor: "rgba(0, 0, 0, 0.5)",

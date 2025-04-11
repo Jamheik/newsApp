@@ -3,21 +3,23 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import { gql, useQuery } from '@apollo/client'
 
 const FEED_QUERY = gql`
-  query Feeds {
-    categories
+query Categories {
+  categories {
+    label
+    values
   }
+}
 `
 
-const CategoryHeaderComponent: React.FC = () => {
+const CategoryHeaderComponent: React.FC<{ onCategoryChange: (category: string | null) => void }> = ({ onCategoryChange }) => {
   const [categories, setCategories] = useState<string[]>(['Default Category']);
-  const [activeCategory, setActiveCategory] = useState<string>(categories[0]);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const { loading, error, data } = useQuery(FEED_QUERY, { errorPolicy: "all" });
 
   React.useEffect(() => {
     if (!loading && data && data.categories) {
-      setCategories(data.categories);
-      setActiveCategory(data.categories[0]);
+      setCategories(data.categories.map((category: { label: string }) => category.label));
     }
   }, [loading, data]);
 
@@ -27,6 +29,12 @@ const CategoryHeaderComponent: React.FC = () => {
 
   if (error) {
     return <Text style={styles.errorText}>Error loading categories</Text>;
+  }
+
+  const handleCategoryPress = (category: string) => {
+    const newActiveCategory = activeCategory === category ? null : category;
+    setActiveCategory(newActiveCategory);
+    onCategoryChange(newActiveCategory);
   }
 
   return (
@@ -43,7 +51,7 @@ const CategoryHeaderComponent: React.FC = () => {
               styles.categoryButton,
               activeCategory === category && styles.activeCategoryButton,
             ]}
-            onPress={() => setActiveCategory(category)}
+            onPress={() => handleCategoryPress(category)}
           >
             <Text
               style={[

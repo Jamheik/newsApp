@@ -11,18 +11,18 @@ export default function RootLayout() {
     {
       name: "NewsList",
       component: ArticleListPage,
-      title: "News App",
+      title: "Uutiset",
     },
     {
       name: "NewsPage",
       component: ArticlePage,
       title: "News Details",
     },
-    {
+    /* {
       name: "WeatherPage",
       component: WeatherComponent,
       title: "Weather",
-    },
+    }, */
   ];
 
   return (

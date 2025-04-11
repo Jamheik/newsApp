@@ -1,23 +1,31 @@
-import { Db, ObjectId, Collection } from 'mongodb';
+import { Db, ObjectId, Collection, Sort } from 'mongodb';
 import { Article, ArticleContext, ArticleAttachment } from '../../types';
 
-export const Resolver = async (_: any, { id }: { id: string }, { db }: { db: Db }) => {
+export const Resolver = async (_: any, { id, version }: { id: string; version?: number }, { db }: { db: Db }) => {
     const articlesCollection: Collection<Article> = db.collection('articles');
     const contextsCollection: Collection<ArticleContext> = db.collection('article_contexts');
-    const attachmentsCollection: Collection<ArticleAttachment> = db.collection('article_attachments');
-    
+
     const article = await articlesCollection.findOne({ _id: new ObjectId(id) });
     if (!article) return null;
+
+    const contextQuery: { article_id: ObjectId; version?: number } = { article_id: article._id };
     
-    // Get the latest context version for this article
+    if (version !== undefined) {
+        contextQuery.version = version;
+    }
+
+    const contextSort: Sort = version !== undefined ? { version: 1 as const } : { version: -1 as const };
+    
     const context = await contextsCollection
-        .find({ article_id: article._id })
-        .sort({ version: -1 })
+        .find(contextQuery)
+        .sort(contextSort)
         .limit(1)
         .next();
     
-    const attachments = await attachmentsCollection.find({ article_id: article._id }).toArray();
-    
+    if (version !== undefined && !context) {
+        return null;
+    }
+
     return {
         article: {
             id: article._id?.toHexString(),
@@ -39,14 +47,6 @@ export const Resolver = async (_: any, { id }: { id: string }, { db }: { db: Db 
                 version: context.version,
                 created_at: context.created_at.toISOString(),
             }
-            : null,
-        attachments: attachments.map(att => ({
-            id: att._id?.toHexString(),
-            article_id: att.article_id.toHexString(),
-            attachment_type: att.attachment_type,
-            attachment_url: att.attachment_url,
-            local_path: att.local_path,
-            created_at: att.created_at.toISOString()
-        }))
+            : null
     };
 }
