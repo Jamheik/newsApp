@@ -11,6 +11,7 @@ import {
   FlatList,
   Modal,
   SafeAreaView,
+  TextInput,
 } from "react-native";
 
 type NavbarProps = {
@@ -26,12 +27,18 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
-  
+
   return (
     <View style={styles.navbar}>
       <Text style={styles.title}>{title}</Text>
-
-      {/* TODO: Why ? */}
+      {searchVisible && (
+        <TextInput
+          style={styles.textInput}
+          placeholder="Search..."
+          value={searchText}
+          onChangeText={(text: string) => setSearchText(text)}
+        />
+      )}
       <View style={{ flex: 1 }} />
 
       <TouchableOpacity
@@ -132,7 +139,6 @@ export const styles = StyleSheet.create({
   },
   textInput: {
     backgroundColor: "white",
-    padding: 10,
     borderRadius: 25,
     width: "50%",
     borderWidth: 1,

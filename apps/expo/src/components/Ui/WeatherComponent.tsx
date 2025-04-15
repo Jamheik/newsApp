@@ -93,20 +93,20 @@ const WeatherComponent: React.FC = () => {
       {error && <Text style={styles.weatherData}>Error: {error.message}</Text>}
 
       {data && data.weather && (
-        <View>
-          <Text style={styles.weatherData}>
+        <View style={styles.weatherDetailsContainer}>
+          <Text style={styles.weatherDetailText}>
             Temperature: {data.weather.temperature}°C
           </Text>
-          <Text style={styles.weatherData}>
+          <Text style={styles.weatherDetailText}>
             Feels Like: {data.weather.feels_like}°C
           </Text>
-          <Text style={styles.weatherData}>
+          <Text style={styles.weatherDetailText}>
             Wind Speed: {data.weather.wind_speed} km/h
           </Text>
-          <Text style={styles.weatherData}>
+          <Text style={styles.weatherDetailText}>
             Location: {data.weather.location}
           </Text>
-          <Text style={styles.weatherData}>
+          <Text style={styles.weatherDetailText}>
             Description: {data.weather.conditions[0]?.description}
           </Text>
           {data.weather.conditions[0]?.icon && (
@@ -126,31 +126,35 @@ const WeatherComponent: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "grey",
-    padding: 10,
+    backgroundColor: "#003366",
+    padding: 20,
+    justifyContent: "flex-start",
+    alignItems: "center",
   },
   input: {
     padding: 10,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    margin: 10,
+    marginBottom: 10,
     backgroundColor: "#fff",
+    width: "90%",
+    fontSize: 16,
   },
   weatherData: {
-    marginTop: 20,
-    padding: 10,
-    color: "black",
+    color: "#ffffff",
     fontSize: 18,
     fontWeight: "bold",
-    lineHeight: 24,
+    textAlign: "center",
+    marginVertical: 5,
   },
   button: {
     marginTop: 10,
     padding: 10,
-    backgroundColor: "#007BFF",
+    backgroundColor: "#00509E",
     borderRadius: 5,
     alignItems: "center",
+    width: "90%",
   },
   buttonText: {
     color: "#fff",
@@ -158,13 +162,27 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   loader: {
-    paddingTop: 100,
+    marginTop: 20,
   },
   weatherImage: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     alignSelf: "center",
+    marginVertical: 10,
+  },
+  weatherDetailsContainer: {
+    backgroundColor: "#004080",
+    borderRadius: 10,
+    padding: 15,
+    width: "90%",
+    alignItems: "center",
     marginTop: 20,
+  },
+  weatherDetailText: {
+    color: "#ffffff",
+    fontSize: 16,
+    marginVertical: 2,
+    fontWeight: "bold",
   },
 });
 
