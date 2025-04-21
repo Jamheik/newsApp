@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -19,14 +19,22 @@ type NavbarProps = {
 };
 
 export const Header: React.FC<NavbarProps> = ({ title }) => {
-  const navigation =
-    useNavigation<
-      StackNavigationProp<{ WeatherPage: undefined; NewsList: undefined }>
-    >();
+  const navigation = useNavigation<
+    StackNavigationProp<{
+      WeatherPage: undefined;
+      NewsList: { searchText: string };
+    }>
+  >();
 
   const [menuVisible, setMenuVisible] = useState(false);
   const [searchVisible, setSearchVisible] = useState(false);
   const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    if (searchText.trim() !== "") {
+      navigation.navigate("NewsList", { searchText });
+    }
+  }, [searchText, navigation]);
 
   return (
     <View style={styles.navbar}>
@@ -40,7 +48,6 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
         />
       )}
       <View style={{ flex: 1 }} />
-
       <TouchableOpacity
         style={{ paddingRight: 15 }}
         onPress={() => setSearchVisible(!searchVisible)}
@@ -60,12 +67,15 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
               renderItem={({ item }: { item: string }) => (
                 <TouchableOpacity
                   style={styles.menuItem}
-                  //onPress={() => setCategory(item)}
                   onPress={() => {
                     if (item === "Weather") {
                       navigation.navigate("WeatherPage");
                     } else {
-                      navigation.navigate("NewsList");
+                      if (searchText.trim() === "") {
+                        alert("Please enter a search term.");
+                        return;
+                      }
+                      navigation.navigate("NewsList", { searchText });
                     }
 
                     setMenuVisible(false);
@@ -96,6 +106,8 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     backgroundColor: "#1E6CC6",
     padding: 15,
+    minHeight: 70,
+    maxHeight: 70,
   },
   title: {
     color: "white",
@@ -138,13 +150,15 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   textInput: {
-    backgroundColor: "white",
+    backgroundColor: "#f0f0f0",
     borderRadius: 25,
     width: "50%",
-    borderWidth: 1,
     borderColor: "#ccc",
     fontSize: 16,
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     marginRight: 10,
     marginLeft: 10,
+    color: "#333",
   },
 });

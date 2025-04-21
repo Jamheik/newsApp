@@ -113,6 +113,7 @@ export const Resolver = async (
         "maastohiihto",
         "Olympialaiset",
         "olympialaiset",
+        "Hiihtolajit",
       ],
     },
     {

@@ -74,7 +74,7 @@ export const typeDefs = `#graphql
 
   type Query {
     feeds: [Feed!]!
-    articles(page: Int, pageSize: Int, categories: [String!], version: Int): ArticlesResponse!
+    articles(page: Int, pageSize: Int, categories: [String!], version: Int, searchTerm: String): ArticlesResponse!
     article(id: ID!, version: Int): ArticleDetail
     weather(location: String, latitude: Float, longitude: Float): Weather
     categories(label: String): [CategoryList!]!
