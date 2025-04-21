@@ -30,8 +30,11 @@ importers:
         specifier: ^6.14.2
         version: 6.15.0(socks@2.8.4)
     devDependencies:
+      '@types/node':
+        specifier: ^22.13.11
+        version: 22.13.14
       typescript:
-        specifier: ^5.8.2
+        specifier: ^5.7.3
         version: 5.8.2
 
   apps/expo:
@@ -1139,7 +1142,7 @@ packages:
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
 
   '@expo/cli@0.22.22':
     resolution: {integrity: sha512-sOttVuk/8gdnsiSeDpnRNpLgBJHLbyQQC0QBGd2iHpr/x6xSYpgoRO6AqwAwGtQsk4ZEPZ83ulvccei1IIPdwg==}

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import pLimit from 'p-limit';
 import * as Sentry from '@sentry/node';
 import { connectToDb } from './db/mongo';
-import { FeedService } from './services/FeedService';
+import { FeedService } from './services/feedService';
 import { ArticleContextService } from './services/ArticleContextService';
 import { ArticleRegenerationService } from './services/ArticleRegenerationService';
 
