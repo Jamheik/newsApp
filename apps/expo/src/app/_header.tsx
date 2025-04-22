@@ -71,10 +71,6 @@ export const Header: React.FC<NavbarProps> = ({ title }) => {
                     if (item === "Weather") {
                       navigation.navigate("WeatherPage");
                     } else {
-                      if (searchText.trim() === "") {
-                        alert("Please enter a search term.");
-                        return;
-                      }
                       navigation.navigate("NewsList", { searchText });
                     }
 

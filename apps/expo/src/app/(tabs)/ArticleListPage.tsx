@@ -115,11 +115,6 @@ const ArticleListPage: React.FC = () => {
   useEffect(() => {
     if (route.params?.searchText && route.params.searchText.length >= 3) {
       setIsSearching(true);
-      console.log("Refetching with variables:", {
-        searchTerm: route.params.searchText,
-        page: 1,
-        pageSize: 10,
-      });
       refetch({ searchTerm: route.params.searchText, page: 1, pageSize: 10 });
     } else {
       setIsSearching(false);
